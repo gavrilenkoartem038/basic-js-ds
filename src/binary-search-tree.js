@@ -102,17 +102,6 @@ class BinarySearchTree {
   }
 }
 
-let tree = new(BinarySearchTree)
-
-      tree.add(13);
-      tree.add(15);
-      tree.add(9);
-      tree.add(20);
-      tree.add(18);
-      tree.add(32);
-      tree.add(25);
-      tree.add(54);
-      tree.remove(15)
 module.exports = {
   BinarySearchTree
 };
