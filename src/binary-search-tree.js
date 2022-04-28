@@ -1,6 +1,6 @@
 const { NotImplementedError } = require('../extensions/index.js');
 
-// const { Node } = require('../extensions/list-tree.js');
+const { Node } = require('../extensions/list-tree.js');
 
 /**
 * Implement simple binary search tree according to task description
@@ -9,43 +9,110 @@ const { NotImplementedError } = require('../extensions/index.js');
 class BinarySearchTree {
 
   constructor() {
-    this.root = null
+    this.head = null
   }
 
   root() {
-    return this.root
+    return this.head
   }
 
   add(data) {
+    this.head = addWithin (this.head, data)
+
+    function addWithin (node, data) {
+      if (!node) return new Node(data)
+      if (node.data === data) return node
+      data < node.data ? node.left = addWithin(node.left, data) : node.right = addWithin(node.right, data)
+      return node
+    }
+  }
+
+  has(data) {
+    return searchWithin (this.head, data)
     
+    function searchWithin (node, data) {
+      if (!node) return false
+      if (node.data === data) return true
+      return data < node.data ? searchWithin(node.left, data) : searchWithin(node.right, data)
+    }
+
   }
 
-  has(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  find(data) {
+    return findWithin (this.head, data)
+    
+    function findWithin (node, data) {
+      if (!node) return null
+      if (node.data === data) return node
+      return data < node.data ? findWithin(node.left, data) : findWithin(node.right, data)
+    }
   }
 
-  find(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
-  }
+  remove(data) {
+    this.head = removeNode (this.head, data)
+    function removeNode (node, data) {
+      if (!node) return null
+      if (data < node.data) {
+        node.left = removeNode(node.left, data)
+        return node
+      } else if (data > node.data) {
+        node.right = removeNode(node.right, data)
+        return node
+      } else {
+        if (!node.left && !node.right) {
+          return null
+        }
+        
+        if (!node.left) {
+          node = node.right
+          return node
+        }
+        if (!node.right) {
+          node = node.left
+          return node
+        }
 
-  remove(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+        let minFromRight = node.right
+        while (minFromRight.left) {
+          minFromRight = minFromRight.left
+        }
+        node.data = minFromRight.data
+        node.right = removeNode(node.right, minFromRight.data)
+        return node
+      }
+    }
   }
 
   min() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    if (!this.head) return null
+    let node = this.head
+    while(node.left) {
+      node = node.left
+    }
+    return node.data
   }
 
   max() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    if (!this.head) return null
+    let node = this.head
+    while(node.right) {
+      node = node.right
+    }
+    return node.data
   }
 }
 
+let tree = new(BinarySearchTree)
+
+      tree.add(13);
+      tree.add(15);
+      tree.add(9);
+      tree.add(20);
+      tree.add(18);
+      tree.add(32);
+      tree.add(25);
+      tree.add(54);
+      tree.remove(15)
 module.exports = {
   BinarySearchTree
 };
